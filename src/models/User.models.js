@@ -23,10 +23,18 @@ const userSchema = new Schema({
     },
     email: {
         type: String,
-        unique: true,
+        // unique: true,
     },
     password: {
         type: String,
+    },
+    emailVerificationCode:{
+       type:Number,
+       default:null
+    },
+    isEmailVerified:{
+        type:Boolean,
+        default:false
     }
 },
     {

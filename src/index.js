@@ -1,12 +1,21 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import connectDb from './db/db.js'
+import signup from './controllers/user.controller.js'
+import { userRouter } from './routes/user.routes.js'
 
 const app = express()
 
 dotenv.config({
     path: './env'
 })
+
+app.use(express.json({     // in this configuration we give the limit for json data,also we give limit
+    limit:"16Kb"
+}))
+app.use(express.urlencoded({  // this configuration is for accepting data from url,also we give limit
+    limit:'16Kb'
+}))
 
 connectDb()
     .then(() => {
@@ -23,3 +32,5 @@ app.get('/', (req, res) => {
         message: "Server is listening at post 4049"
     })
 })
+
+app.use('/api/user',userRouter)
