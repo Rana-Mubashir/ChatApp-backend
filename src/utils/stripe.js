@@ -1,6 +1,8 @@
 import Stripe from "stripe";
+import { config } from "dotenv";
+config()
 
-const stripe = Stripe('sk_test_51QbNFjGWuPv4JbNj3GNLWRuO1JSJrE58wnvDjJXP6IH77ZDVaqLzU0yu6lZt9TeFB2igzFLebgeDd9JeyAadnjO800Vwv3ZNse')
+const stripe = Stripe(process.env.STRIPE_KEY)
 
 // we use this when we have to make custom form for checkout
 async function createPaymentIntent(req, res) {
