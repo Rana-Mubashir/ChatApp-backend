@@ -1,8 +1,8 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import connectDb from './db/db.js'
-import signup from './controllers/user.controller.js'
 import { userRouter } from './routes/user.routes.js'
+import stripeRouter from './routes/stripe.routes.js'
 
 const app = express()
 
@@ -34,3 +34,5 @@ app.get('/', (req, res) => {
 })
 
 app.use('/api/user',userRouter)
+
+app.use('/api/payment',stripeRouter)

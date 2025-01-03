@@ -11,8 +11,6 @@ async function signup(req, res) {
         !lastName ||
         !email ||
         !password ||
-        !bio ||
-        !userImage ||
         !gender ||
         !dateOfBirth
     ) {
@@ -24,7 +22,7 @@ async function signup(req, res) {
     const emailVerificationCode = Math.floor(100000 + Math.random() * 900000).toString();
 
     try {
-        const resp = await UserModel.create({ firstName, lastName, email, password, bio, userImage, gender, dateOfBirth, emailVerificationCode })
+        const resp = await UserModel.create({ firstName, lastName, email, password,gender, dateOfBirth, emailVerificationCode })
         if (!resp) {
             return res.status(500).json({
                 message: "Something went wrong while creating the user !!!"
@@ -40,11 +38,12 @@ async function signup(req, res) {
         }
 
         return res.status(201).json({
-            message: "User created sucessfully and confirmation email is sent !!!"
+            message: "User created sucessfully and confirmation email is send !!!"
         })
 
     } catch (error) {
         if (error.code === 11000) {
+            console.log("in 11000 error code")
             if (error.keyPattern.firstName && error.keyPattern.lastName) {
                 return res.status(400).json({
                     message: "A user with same first and last name already exists!!!"
