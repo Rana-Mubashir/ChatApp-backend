@@ -154,11 +154,11 @@ async function verifyEmail(req, res) {
     }
 }
 
-// /api/user/verificationbyemail
+
+// get: /api/user/verificationbyemail
 async function verificationByEmail(req, res) {
     try {
         const { email } = req.params
-        console.log("email",email)
 
         if (!email) {
             return res.status(400).json({
@@ -166,7 +166,7 @@ async function verificationByEmail(req, res) {
             })
         }
 
-        const user =await  UserModel.findOne({ email: email })
+        const user = await UserModel.findOne({ email: email })
 
         if (!user) {
             return res.status(404).json({
@@ -207,5 +207,88 @@ async function verificationByEmail(req, res) {
     }
 }
 
+//get: /api/user/sendresetlink/:email
+async function sendResetLink(req, res) {
+    try {
 
-export default { signup, sendEmailVerification, verifyEmail, verificationByEmail }
+        const { email } = req.params
+
+        if (!email) {
+            return res.status(400).json({
+                message: "Email must be required !!!"
+            })
+        }
+
+        const user = await UserModel.findOne({ email: email })
+
+        if (!user) {
+            return res.status(404).json({
+                message: "No User Found With This Email !!!"
+            })
+        }
+
+        const emailRes = await sendEmail(email, '', 'reset',user._id)
+
+        if (!emailRes) {
+            return res.status(500).json({
+                message: "Enable to send reset password link,Try again !!"
+            })
+        }
+
+        return res.status(200).json({
+            message: "Check Your Email To Reset Password !!!"
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            message: "An Unexpected error occured !!!",
+            error: error.message
+        })
+    }
+}
+
+// put: /api/user/resetpassword
+async function resetPassword(req, res) {
+    try {
+
+        const { userId, password, confirmPassword } = req.body
+
+        if (!userId || !password || !confirmPassword) {
+            return res.status(400).json({
+                message: "UserId ,password and confirmPassword must be required !!!"
+            })
+        }
+
+        const user = await UserModel.findById({ _id: userId })
+
+        if (!user) {
+            return res.status(404).json({
+                message: "No User Found !!!"
+            })
+        }
+
+        user.password = password
+
+        await user.save()
+
+        return res.status(200).json({
+            message: "Password Changes Successfully !!!"
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            message: "An Unexpected error occured !!!",
+            error: error.message
+        })
+    }
+}
+
+
+export default {
+    signup,
+    sendEmailVerification,
+    verifyEmail,
+    verificationByEmail,
+    sendResetLink,
+    resetPassword
+}
