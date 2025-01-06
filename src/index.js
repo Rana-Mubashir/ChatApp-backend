@@ -3,6 +3,8 @@ import dotenv from 'dotenv'
 import connectDb from './db/db.js'
 import { userRouter } from './routes/user.routes.js'
 import stripeRouter from './routes/stripe.routes.js'
+import session from 'express-session'
+import passport from 'passport'
 
 const app = express()
 
@@ -10,12 +12,21 @@ dotenv.config({
     path: './env'
 })
 
-app.use(express.json({     // in this configuration we give the limit for json data,also we give limit
-    limit:"16Kb"
+app.use(express.json({
+    limit: "16Kb"
 }))
-app.use(express.urlencoded({  // this configuration is for accepting data from url,also we give limit
-    limit:'16Kb'
+app.use(express.urlencoded({
+    limit: '16Kb'
 }))
+
+app.use(session({
+    secret: "secret-key",
+    resave: false,
+    saveUninitialized: true,
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 connectDb()
     .then(() => {
@@ -24,7 +35,7 @@ connectDb()
         })
     })
     .catch((error) => {
-        console.log("error in connecting with database",error)
+        console.log("error in connecting with database", error)
     })
 
 app.get('/', (req, res) => {
@@ -33,6 +44,6 @@ app.get('/', (req, res) => {
     })
 })
 
-app.use('/api/user',userRouter)
+app.use('/api/user', userRouter)
 
-app.use('/api/payment',stripeRouter)
+app.use('/api/payment', stripeRouter)
