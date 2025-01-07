@@ -4,7 +4,6 @@ import sendEmail from "../utils/email.js";
 
 // post : /api/user/signup
 async function signup(req, res) {
-    console.log("req.body", req.body)
     const { firstName, lastName, email, password, gender, dateOfBirth } = req.body
     if (
         !firstName ||
