@@ -62,6 +62,45 @@ async function signup(req, res) {
     }
 }
 
+// post:/api/user/signin
+async function signin(req, res) {
+    try {
+
+        const { email, password } = req.body
+
+        if (!email || !password) {
+            return res.status(400).json({
+                message: "All Fields required !!!"
+            })
+        }
+
+        const user = await UserModel.findOne({ email: email })
+
+        if (!user) {
+            return res.status(404).json({
+                message: "No User Found !!!"
+            })
+        }
+
+        if (user.password != password) {
+            return res.status(400).json({
+                message: "You Entered Wrong Password !!!"
+            })
+        }
+
+        return res.status(200).json({
+            message: "User Sign In Successfully !!!",
+            user
+        })
+
+    } catch (error) {
+        return res.status(500).json({
+            message: "An unexpected error occurred.",
+            error: error.message,
+        });
+    }
+}
+
 // get:/api/user/sendemailverification/:userId
 async function sendEmailVerification(req, res) {
     try {
@@ -226,7 +265,7 @@ async function sendResetLink(req, res) {
             })
         }
 
-        const emailRes = await sendEmail(email, '', 'reset',user._id)
+        const emailRes = await sendEmail(email, '', 'reset', user._id)
 
         if (!emailRes) {
             return res.status(500).json({
@@ -285,6 +324,7 @@ async function resetPassword(req, res) {
 
 export default {
     signup,
+    signin,
     sendEmailVerification,
     verifyEmail,
     verificationByEmail,
