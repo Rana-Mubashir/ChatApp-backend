@@ -87,7 +87,6 @@ async function signin(req, res) {
                 message: "You Entered Wrong Password !!!"
             })
         }
-
         return res.status(200).json({
             message: "User Sign In Successfully !!!",
             user
