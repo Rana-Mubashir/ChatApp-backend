@@ -3,7 +3,7 @@ import { config } from "dotenv";
 
 config();
 
-async function connectDb() {
+async function connectDb(){
     try {
         const connect = await mongoose.connect(process.env.DATABASEURI)
         if (connect) {
