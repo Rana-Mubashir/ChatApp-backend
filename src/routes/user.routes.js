@@ -9,5 +9,6 @@ userRouter.put('/verifyemail', userController.verifyEmail)
 userRouter.get('/verificationbyemail/:email', userController.verificationByEmail)
 userRouter.get('/sendresetlink/:email', userController.sendResetLink)
 userRouter.put('/resetpassword', userController.resetPassword)
+userRouter.get('/all/:id',userController.getAllUsers)
 
 export { userRouter }

@@ -1,7 +1,6 @@
 import UserModel from "../models/User.models.js";
 import sendEmail from "../utils/email.js";
 
-
 // post : /api/user/signup
 async function signup(req, res) {
     const { firstName, lastName, email, password, gender, dateOfBirth } = req.body
@@ -320,6 +319,22 @@ async function resetPassword(req, res) {
     }
 }
 
+async function getAllUsers(req, res) {
+    try {
+        const { id } = req.params
+        const users = await UserModel.where('_id').ne(id);
+        return res.status(200).json({
+            message: "Users",
+            users
+        })
+    } catch (error) {
+        return res.status(500).json({
+            message: "An Unexpected error occured !!!",
+            error: error.message
+        })
+    }
+}
+
 
 export default {
     signup,
@@ -328,5 +343,6 @@ export default {
     verifyEmail,
     verificationByEmail,
     sendResetLink,
-    resetPassword
+    resetPassword,
+    getAllUsers
 }
