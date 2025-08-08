@@ -3,8 +3,8 @@ import {
     accessChat,
     sendMessage,
     createGroup,
-    getGroupByUserAndChatId,
-    getJoinedGroupsByUser
+    accessGroupChat,
+    getJoinedGroups
 } from "../controllers/chat.controller.js";
 
 const chatRouter = Router();
@@ -15,8 +15,8 @@ chatRouter.post('/message', sendMessage);
 
 chatRouter.post('/group/create', createGroup);
 
-chatRouter.get('/group/:userId/:chatId', getGroupByUserAndChatId);
+chatRouter.get('/group/:userId/:chatId', accessGroupChat);
 
-chatRouter.get('/groups/:userId', getJoinedGroupsByUser);
+chatRouter.get('/groups/:userId', getJoinedGroups);
 
 export { chatRouter };
